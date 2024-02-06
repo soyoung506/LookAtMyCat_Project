@@ -32,7 +32,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         try {
             accessToken = getToken(request);
-            
             // access 토큰값이 존재한다면
             if (StringUtils.hasText(accessToken)) {
                 getAuthentication(accessToken);

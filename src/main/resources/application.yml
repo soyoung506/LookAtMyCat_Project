@@ -3,6 +3,7 @@ server:
         encoding:
             force-response: 'true'
 
+
 spring:
     profiles:
         include: secret
@@ -48,3 +49,6 @@ spring:
                   ssl:
                       enable: true
                       trust: smtp.naver.com
+#logging:
+#    level:
+#        org.springframework: DEBUG

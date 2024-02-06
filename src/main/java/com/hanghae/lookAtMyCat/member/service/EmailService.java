@@ -1,6 +1,5 @@
 package com.hanghae.lookAtMyCat.member.service;
 
-import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +8,7 @@ import org.springframework.mail.MailAuthenticationException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -21,6 +21,7 @@ public class EmailService {
     @Autowired
     private StringRedisTemplate redisTemplate;
 
+    @Transactional
     public void sendVerificationEmail(String userEmail) {
         try {
             String verificationToken  = generateVerificationToken();
@@ -38,7 +39,7 @@ public class EmailService {
             javaMailSender.send(message);
 
             redisTemplate.opsForValue().set(verificationToken, userEmail);  // 레디스에 key 토큰, value 이메일 저장
-            redisTemplate.expire(verificationToken, 60 * 5, TimeUnit.SECONDS);  // 토큰 만료 시간 5분
+            redisTemplate.expire(verificationToken, 60 * 10, TimeUnit.SECONDS);  // 토큰 만료 시간 10분
         } catch (MailAuthenticationException e) {
             // 메일 서버에 대한 인증 실패
             e.printStackTrace();

@@ -2,6 +2,7 @@ package com.hanghae.lookAtMyCat.security.service;
 
 import com.hanghae.lookAtMyCat.member.dto.MemberDTO;
 import com.hanghae.lookAtMyCat.member.entity.User;
+import com.hanghae.lookAtMyCat.member.handler.exception.SessionExpiredException;
 import com.hanghae.lookAtMyCat.member.service.MemberService;
 import com.hanghae.lookAtMyCat.security.dto.MemberLoginResponseDTO;
 import com.hanghae.lookAtMyCat.security.util.JwtTokenizer;
@@ -46,7 +47,7 @@ public class JwtTokenService {
     public MemberLoginResponseDTO newAccessToken(String refreshToken) {
         String value = redisTemplate.opsForValue().get(refreshToken);
         if (value == null) {
-            return null;
+            throw new SessionExpiredException();
         }
 
         // refresh 토큰 복호화
