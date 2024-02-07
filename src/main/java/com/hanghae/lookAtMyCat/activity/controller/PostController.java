@@ -1,5 +1,6 @@
 package com.hanghae.lookAtMyCat.activity.controller;
 
+import com.hanghae.lookAtMyCat.activity.dto.NewsFeedDTO;
 import com.hanghae.lookAtMyCat.activity.dto.PostDTO;
 import com.hanghae.lookAtMyCat.activity.dto.PostResponseDTO;
 import com.hanghae.lookAtMyCat.activity.service.PostService;
@@ -16,6 +17,7 @@ import org.springframework.web.util.UriUtils;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,10 +34,24 @@ public class PostController {
         return ResponseEntity.ok("포스팅 되었습니다.");
     }
 
+    // 게시글 수정
+    @PatchMapping
+    public ResponseEntity<String> postUpdate(@RequestBody PostDTO postDTO, Authentication authentication) {
+        postService.postUpdate(postDTO, Long.parseLong(authentication.getName()));
+        return ResponseEntity.ok("포스트가 수정되었습니다.");
+    }
+
+    // 게시글 삭제
+    @DeleteMapping
+    public ResponseEntity<String> postDelete(@RequestBody PostDTO postDTO, Authentication authentication) {
+        postService.postDelete(postDTO, Long.parseLong(authentication.getName()));
+        return ResponseEntity.ok("포스트가 삭제되었습니다.");
+    }
+
     // 게시글 조회
     @GetMapping
-    public ResponseEntity<PostResponseDTO> postGet(@RequestBody PostDTO postDTO) {
-        PostResponseDTO postResponseDTO = postService.getPost(postDTO);
+    public ResponseEntity<PostResponseDTO> postGet(@RequestBody PostDTO postDTO, Authentication authentication) {
+        PostResponseDTO postResponseDTO = postService.getPost(postDTO, Long.parseLong(authentication.getName()));
         return ResponseEntity.ok(postResponseDTO);
     }
 
@@ -51,18 +67,12 @@ public class PostController {
                 .body(resource);
     }
 
-
-    // 게시글 수정
-    @PatchMapping
-    public ResponseEntity<String> postUpdate(@RequestBody PostDTO postDTO, Authentication authentication) {
-        postService.postUpdate(postDTO, Long.parseLong(authentication.getName()));
-        return ResponseEntity.ok("포스트가 수정되었습니다.");
+    // 뉴스피드 조회
+    // 팔로우 사용자의 게시글, 팔로우 사용자가 쓴 댓글의 게시글, 팔로우 사용자가 좋아요한 게시글
+    @GetMapping("/newsfeed")
+    public ResponseEntity<List<NewsFeedDTO>> newsFeed(Authentication authentication) {
+        List<NewsFeedDTO> newsFeedDTOs = postService.newsFeed(Long.parseLong(authentication.getName()));
+        return ResponseEntity.ok(newsFeedDTOs);
     }
 
-    // 게시글 삭제
-    @DeleteMapping
-    public ResponseEntity<String> postDelete(@RequestBody PostDTO postDTO, Authentication authentication) {
-        postService.postDelete(postDTO, Long.parseLong(authentication.getName()));
-        return ResponseEntity.ok("포스트가 삭제되었습니다.");
-    }
 }

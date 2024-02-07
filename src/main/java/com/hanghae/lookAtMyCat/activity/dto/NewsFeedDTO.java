@@ -13,7 +13,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @ToString
-public class PostResponseDTO {
+public class NewsFeedDTO {
 
     @NotEmpty
     private Long postKey;
@@ -42,10 +42,16 @@ public class PostResponseDTO {
     @NotEmpty
     private LocalDateTime postUpdate;
 
-    private String followCommentNick;
+    // 1: 팔로우 사용자의 포스트
+    // 2: 팔로우 사용자가 댓글 단 포스트
+    // 3: 팔로우 사용자가 좋아요한 포스트
+    @NotEmpty
+    private int newsFeedType;
 
-    private String followComment;
+    @NotEmpty
+    private Long followUserKey;
 
-    private String followLikeNick;
+    @NotEmpty
+    private String followUserNick;
 
 }

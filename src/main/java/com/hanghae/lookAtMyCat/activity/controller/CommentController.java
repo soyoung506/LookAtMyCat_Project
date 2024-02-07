@@ -41,9 +41,10 @@ public class CommentController {
     }
 
     // 포스트 댓글 조회
+    // 팔로우 사용자순 -> 좋아요 많은 순 -> 최신순
     @GetMapping
-    public ResponseEntity commentGet(@RequestBody CommentDTO commentDTO) {
-        List<CommentResponseDTO> commentResponseDTO = commentService.commentGet(commentDTO);
+    public ResponseEntity commentGet(@RequestBody CommentDTO commentDTO, Authentication authentication) {
+        List<CommentResponseDTO> commentResponseDTO = commentService.commentGet(commentDTO, Long.parseLong(authentication.getName()));
         if(!commentResponseDTO.isEmpty()) {
             return ResponseEntity.ok(commentResponseDTO);
         }

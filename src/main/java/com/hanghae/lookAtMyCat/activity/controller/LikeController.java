@@ -35,9 +35,10 @@ public class LikeController {
     }
 
     // 게시글 좋아요 조회
+    // 팔로우 사용자순 -> 최신순
     @GetMapping("/post")
-    public ResponseEntity<List<PostLikeResponseDTO>> postLikeGet(@RequestBody PostLikeDTO postLikeDTO) {
-        List<PostLikeResponseDTO> postLikeResponseDTO = likeService.postLikeGet(postLikeDTO);
+    public ResponseEntity<List<PostLikeResponseDTO>> postLikeGet(@RequestBody PostLikeDTO postLikeDTO, Authentication authentication) {
+        List<PostLikeResponseDTO> postLikeResponseDTO = likeService.postLikeGet(postLikeDTO, Long.parseLong(authentication.getName()));
         return ResponseEntity.ok(postLikeResponseDTO);
     }
 

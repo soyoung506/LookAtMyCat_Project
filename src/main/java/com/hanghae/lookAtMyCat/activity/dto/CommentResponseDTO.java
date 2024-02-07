@@ -35,4 +35,6 @@ public class CommentResponseDTO {
     @NotEmpty
     private LocalDateTime commUpdate;
 
+    private int orderPriority;
+
 }

@@ -1,5 +1,6 @@
 package com.hanghae.lookAtMyCat.activity.service;
 
+import com.hanghae.lookAtMyCat.activity.dto.NewsFeedDTO;
 import com.hanghae.lookAtMyCat.activity.dto.PostDTO;
 import com.hanghae.lookAtMyCat.activity.dto.PostResponseDTO;
 import com.hanghae.lookAtMyCat.activity.entity.Post;
@@ -51,23 +52,6 @@ public class PostService {
         postRepository.save(post);
     }
 
-    // 게시글 조회
-    @Transactional(readOnly = true)
-    public PostResponseDTO getPost(PostDTO postDTO) {
-        Post post = postRepository.findById(postDTO.getPostKey())
-                .orElseThrow(PostNotFoundException::new);
-        return postRepository.getPost(post.getPostKey());
-    }
-
-    // 게시글 이미지 조회
-    @Transactional
-    public UrlResource getPostImage(PostDTO postDTO) throws IOException {
-        Post post = postRepository.findById(postDTO.getPostKey())
-                .orElseThrow(PostNotFoundException::new);
-        String postImageDir = post.getPostImageDir();
-        return new UrlResource("file:///" + POSTIMAGEPATH + postImageDir + "//" + postDTO.getPostImageName());
-    }
-
     // 게시글 수정
     @Transactional
     public void postUpdate(PostDTO postDTO, Long userKey) {
@@ -102,5 +86,26 @@ public class PostService {
         }
         // JPA의 deleteById는 내부에서 findById 조회 후 값이 없을 경우 EmptyResultDataAccessException이 발생한다.
         postRepository.deleteById(postDTO.getPostKey());
+    }
+
+    // 게시글 조회
+    @Transactional(readOnly = true)
+    public PostResponseDTO getPost(PostDTO postDTO, Long userKey) {
+        Post post = postRepository.findById(postDTO.getPostKey())
+                .orElseThrow(PostNotFoundException::new);
+        return postRepository.getPost(post.getPostKey(), userKey);
+    }
+
+    // 게시글 이미지 조회
+    @Transactional
+    public UrlResource getPostImage(PostDTO postDTO) throws IOException {
+        Post post = postRepository.findById(postDTO.getPostKey())
+                .orElseThrow(PostNotFoundException::new);
+        String postImageDir = post.getPostImageDir();
+        return new UrlResource("file:///" + POSTIMAGEPATH + postImageDir + "//" + postDTO.getPostImageName());
+    }
+
+    public List<NewsFeedDTO> newsFeed(Long userKey) {
+        return postRepository.getNewsFeed(userKey);
     }
 }

@@ -61,10 +61,10 @@ public class CommentService {
 
     // 포스트 댓글 조회
     @Transactional(readOnly = true)
-    public List<CommentResponseDTO> commentGet(CommentDTO commentDTO) {
+    public List<CommentResponseDTO> commentGet(CommentDTO commentDTO, Long userKey) {
         Post post = postRepository.findById(commentDTO.getPostKey())
                 .orElseThrow(PostNotFoundException::new);
-        return commentRepository.getCommentList(post);
+        return commentRepository.getCommentList(post, userKey);
     }
 
 }

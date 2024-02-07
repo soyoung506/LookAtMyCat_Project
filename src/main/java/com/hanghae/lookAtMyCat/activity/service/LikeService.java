@@ -53,10 +53,10 @@ public class LikeService {
     
     // 게시글 좋아요 조회
     @Transactional(readOnly = true)
-    public List<PostLikeResponseDTO> postLikeGet(PostLikeDTO postLikeDTO) {
+    public List<PostLikeResponseDTO> postLikeGet(PostLikeDTO postLikeDTO, Long userKey) {
         Post post = postRepository.findById(postLikeDTO.getPostKey())
                 .orElseThrow(PostNotFoundException::new);  // 포스트가 존재하지 않는다면 예외처리
-        return postLikeRepository.getPostLikeList(post);
+        return postLikeRepository.getPostLikeList(post, userKey);
     }
     
 
