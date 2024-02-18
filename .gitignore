@@ -38,3 +38,6 @@ out/
 
 ### secret ###
 application-secret.yml
+
+### database ###
+/db/mysql

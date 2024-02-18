@@ -1,0 +1,12 @@
+dependencies {
+	// 스프링부트
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+}
+
+clean {
+	delete file('module_activityService/src/main/generated')
+}
+
+// prepareKotlinBuildScriptModel 오류 방지
+tasks.register("prepareKotlinBuildScriptModel") {}

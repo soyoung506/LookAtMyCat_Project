@@ -1,0 +1,15 @@
+dependencies {
+	// 스프링부트
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	// 이메일 관리
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+}
+
+clean {
+	delete file('module_userService/src/main/generated')
+}
+
+// prepareKotlinBuildScriptModel 오류 방지
+tasks.register("prepareKotlinBuildScriptModel") {}
