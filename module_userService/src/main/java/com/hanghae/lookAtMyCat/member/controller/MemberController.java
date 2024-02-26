@@ -3,13 +3,12 @@ package com.hanghae.lookAtMyCat.member.controller;
 import com.hanghae.lookAtMyCat.member.dto.*;
 import com.hanghae.lookAtMyCat.member.service.EmailService;
 import com.hanghae.lookAtMyCat.member.service.MemberService;
+import com.hanghae.lookAtMyCat.member.service.TokenService;
 import com.hanghae.lookAtMyCat.security.dto.MemberLoginResponseDTO;
 import com.hanghae.lookAtMyCat.security.dto.RefreshTokenDTO;
 import com.hanghae.lookAtMyCat.security.service.JwtTokenService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +27,7 @@ public class MemberController {
     private final MemberService memberService;
     private final EmailService emailService;
     private final JwtTokenService jwtTokenService;
-    private final StringRedisTemplate redisTemplate;
+    private final TokenService tokenService;
 
     // 회원가입 및 이메일 인증링크 전송
     @PostMapping("/signup")
@@ -47,14 +46,8 @@ public class MemberController {
     // 이메일 인증링크 확인
     @GetMapping("/signup/verify")
     public ResponseEntity<String> verifyEmail(@RequestParam("token") String token) {
-        ValueOperations<String, String> valueOps = redisTemplate.opsForValue();
-        String userEmail = valueOps.get(token);
-        if (userEmail != null) {
-            memberService.activateUser(userEmail);
-            redisTemplate.delete(token);
-            return ResponseEntity.ok("이메일 인증에 성공했습니다.");
-        }
-        return ResponseEntity.status(HttpStatus.CONFLICT).body("기간이 만료되었거나 유효하지 않는 링크입니다.");
+        tokenService.deleteToken(token);
+        return ResponseEntity.ok("이메일 인증에 성공했습니다.");
     }
 
     // 로그인

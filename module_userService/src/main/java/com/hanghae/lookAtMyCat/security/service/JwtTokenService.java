@@ -2,6 +2,7 @@ package com.hanghae.lookAtMyCat.security.service;
 
 import com.hanghae.lookAtMyCat.member.dto.MemberDTO;
 import com.hanghae.lookAtMyCat.member.entity.User;
+import com.hanghae.lookAtMyCat.member.handler.exception.MemberNotFoundException;
 import com.hanghae.lookAtMyCat.member.handler.exception.SessionExpiredException;
 import com.hanghae.lookAtMyCat.member.service.MemberService;
 import com.hanghae.lookAtMyCat.security.dto.MemberLoginResponseDTO;
@@ -31,7 +32,8 @@ public class JwtTokenService {
         String refreshToken = jwtTokenizer.createRefreshToken(memberDTO.getUserKey(), memberDTO.getUserEmail());
 
         // redis에 refresh 토큰 저장
-        redisTemplate.opsForValue().set(refreshToken, String.valueOf(memberDTO.getUserKey()));
+        String redisRefreshToken = "token:refresh:" + refreshToken;
+        redisTemplate.opsForValue().set(redisRefreshToken, String.valueOf(memberDTO.getUserKey()));
         redisTemplate.expire(refreshToken, 7 * 24 * 60 * 60 * 1000L, TimeUnit.MILLISECONDS);  // 토큰 만료 시간 7일
 
         return MemberLoginResponseDTO.builder()
@@ -44,12 +46,14 @@ public class JwtTokenService {
 
     // 로그아웃 시 refresh 토큰 삭제
     public void deleteRefreshToken(String refreshToken) {
-        redisTemplate.unlink(refreshToken);
+        String redisRefreshToken = "token:refresh:" + refreshToken;
+        redisTemplate.unlink(redisRefreshToken);
     }
 
     // acceess 토큰 만료 시 refresh 토큰 비교 후 새로운 access 토큰 발행
     public MemberLoginResponseDTO newAccessToken(String refreshToken) {
-        String value = redisTemplate.opsForValue().get(refreshToken);
+        String redisRefreshToken = "token:refresh:" + refreshToken;
+        String value = redisTemplate.opsForValue().get(redisRefreshToken);
         if (value == null) {
             throw new SessionExpiredException();
         }
@@ -59,7 +63,7 @@ public class JwtTokenService {
         Long userKey = Long.valueOf((Integer)claims.get("userKey"));
 
         // 회원탈퇴 여부 확인
-        User user = memberService.getUser(userKey).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+        User user = memberService.getUser(userKey).orElseThrow(MemberNotFoundException::new);
 
         String userEmail = claims.getSubject();
         String accessToken = jwtTokenizer.createAccessToken(userKey, userEmail);

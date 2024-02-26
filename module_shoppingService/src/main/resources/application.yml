@@ -2,7 +2,7 @@ server:
     servlet:
         encoding:
             force-response: 'true'
-        context-path: /activity
+        context-path: /shopping
     port: 8083
 
 
@@ -16,7 +16,7 @@ spring:
             enabled: 'true'
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://localhost:3306/mycat_activity?serverTimezone=Asia/Seoul&useUnicode=true&characterEncoding=UTF-8
+        url: jdbc:mysql://localhost:3306/mycat_shopping?serverTimezone=Asia/Seoul&useUnicode=true&characterEncoding=UTF-8
     jpa:
         open-in-view: true
         hibernate:

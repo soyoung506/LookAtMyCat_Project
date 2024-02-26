@@ -95,9 +95,7 @@ public class PostService {
     // 게시글 조회
     @Transactional(readOnly = true)
     public PostResponseDTO getPost(PostDTO postDTO, Long userKey) {
-        Post post = postRepository.findById(postDTO.getPostKey())
-                .orElseThrow(PostNotFoundException::new);
-        return postRepository.getPost(post.getPostKey(), userKey);
+        return postRepository.getPost(postDTO.getPostKey(), userKey).orElseThrow(PostNotFoundException::new);
     }
 
     // 게시글 이미지 조회
@@ -109,6 +107,8 @@ public class PostService {
         return new UrlResource("file:///" + POSTIMAGEPATH + postImageDir + "//" + postDTO.getPostImageName());
     }
 
+    // 뉴스피드 조회
+    @Transactional
     public List<NewsFeedDTO> newsFeed(Long userKey) {
         return postRepository.getNewsFeed(userKey);
     }

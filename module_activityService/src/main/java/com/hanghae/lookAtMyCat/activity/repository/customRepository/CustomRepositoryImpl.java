@@ -15,6 +15,7 @@ import jakarta.persistence.EntityManager;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -90,7 +91,7 @@ public class CustomRepositoryImpl implements CustomRepository {
     // 포스트키, 유저키, 유저닉네임, 포스트 내용, 포스트이미지들, 좋아요수, 댓글수, 포스트 등록일, 포스트 수정일 출력
     // 추가출력: 좋아요 한 팔로우 유저의 닉네임(1개), 댓글 단 팔로우 유저의 댓글(1개)
     @Override
-    public PostResponseDTO getPost(Long postKey, Long userKey) {
+    public Optional<PostResponseDTO> getPost(Long postKey, Long userKey) {
         QPost post = QPost.post;
         QPostLike postLike = QPostLike.postLike;
         QComment comment = QComment.comment;
@@ -114,28 +115,30 @@ public class CustomRepositoryImpl implements CustomRepository {
                 .limit(1)
                 .fetchOne();
         // 포스트 정보 추출
-        PostResponseDTO postResponseDTO = query
+        Optional<PostResponseDTO> postResponseDTO = Optional.ofNullable(query
                 .select(Projections.bean(PostResponseDTO.class, post.postKey, post.userKey,
                         post.userNick, post.postContent, post.postImage, post.postDate, post.postUpdate,
                         ExpressionUtils.as(
                                 JPAExpressions.select(postLike.postLikeKey.count())
                                         .from(postLike)
                                         .where(postLike.post.postKey.eq(postKey))
-                                ,"likeCount"
+                                , "likeCount"
                         ),
                         ExpressionUtils.as(
                                 JPAExpressions.select(comment.commKey.count())
                                         .from(comment)
                                         .where(comment.post.postKey.eq(postKey))
-                                ,"commCount"
+                                , "commCount"
                         )))
                 .from(post)
                 .where(post.postKey.eq(postKey))
-                .fetchOne();
+                .fetchOne());
         // postResponseDTO에 팔로우 사용자 닉네임 저장
-        postResponseDTO.setFollowLikeNick(followLikeNick != null ? followLikeNick : null);
-        postResponseDTO.setFollowCommentNick(tupleFollowComment != null ? tupleFollowComment.get(0, String.class) : null);
-        postResponseDTO.setFollowComment(tupleFollowComment != null ? tupleFollowComment.get(1, String.class) : null);
+        postResponseDTO.ifPresent(dto -> {
+            dto.setFollowLikeNick(followLikeNick != null ? followLikeNick : null);
+            dto.setFollowCommentNick(tupleFollowComment != null ? tupleFollowComment.get(0, String.class) : null);
+            dto.setFollowComment(tupleFollowComment != null ? tupleFollowComment.get(1, String.class) : null);
+        });
         return postResponseDTO;
     }
 

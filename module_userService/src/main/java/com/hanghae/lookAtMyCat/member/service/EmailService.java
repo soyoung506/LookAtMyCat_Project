@@ -2,7 +2,7 @@ package com.hanghae.lookAtMyCat.member.service;
 
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.mail.MailAuthenticationException;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -14,18 +14,18 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Service
+@RequiredArgsConstructor
 public class EmailService {
 
-    @Autowired
-    private JavaMailSender javaMailSender;
-    @Autowired
-    private StringRedisTemplate redisTemplate;
+    private final JavaMailSender javaMailSender;
+    private final StringRedisTemplate redisTemplate;
 
     @Transactional
     public void sendVerificationEmail(String userEmail) {
         try {
             String verificationToken  = generateVerificationToken();
             String verificationUrl = buildVerificationUrl(verificationToken);
+            String redisVerificationToken = "token:verification:" + verificationToken;
 
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
@@ -38,8 +38,8 @@ public class EmailService {
 
             javaMailSender.send(message);
 
-            redisTemplate.opsForValue().set(verificationToken, userEmail);  // 레디스에 key 토큰, value 이메일 저장
-            redisTemplate.expire(verificationToken, 60 * 10, TimeUnit.SECONDS);  // 토큰 만료 시간 10분
+            redisTemplate.opsForValue().set(redisVerificationToken, userEmail);  // 레디스에 key 토큰, value 이메일 저장
+            redisTemplate.expire(redisVerificationToken, 60 * 10, TimeUnit.SECONDS);  // 토큰 만료 시간 10분
         } catch (MailAuthenticationException e) {
             // 메일 서버에 대한 인증 실패
             e.printStackTrace();

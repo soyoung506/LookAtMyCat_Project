@@ -1,29 +1,26 @@
 package com.hanghae.lookAtMyCat.member.service;
 
 import com.hanghae.lookAtMyCat.member.entity.User;
+import com.hanghae.lookAtMyCat.member.handler.exception.MemberNotFoundException;
+import com.hanghae.lookAtMyCat.member.handler.exception.TokenExpiredException;
 import com.hanghae.lookAtMyCat.member.repository.MemberRepository;
-import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @Service
+@RequiredArgsConstructor
 public class TokenService {
 
     private final StringRedisTemplate redisTemplate;
     private final MemberRepository memberRepository;
-
-    public TokenService(StringRedisTemplate redisTemplate, MemberRepository memberRepository) {
-        this.redisTemplate = redisTemplate;
-        this.memberRepository = memberRepository;
-    }
 
     @Scheduled(fixedRate = 10000) // 10초마다 실행
     public void processExpiredTokens() {
@@ -60,4 +57,19 @@ public class TokenService {
         }
     }
 
+    // 이메일 인증 시, 계정 활성화 및 이메일 인증 토큰 삭제
+    @Transactional
+    public void deleteToken(String token) {
+        String redisVerificationToken = "token:verification:" + token;
+        String userEmail = redisTemplate.opsForValue().get(redisVerificationToken);
+        if (userEmail != null) {
+            User user = memberRepository.findByUserEmail(userEmail)
+                    .orElseThrow(() -> new MemberNotFoundException("회원정보가 존재하지 않습니다. 회원가입을 진행해 주세요."));
+            user.emailVerifiedSuccess();
+            memberRepository.save(user);
+            redisTemplate.unlink(redisVerificationToken);
+        }else {
+            throw new TokenExpiredException();
+        }
+    }
 }

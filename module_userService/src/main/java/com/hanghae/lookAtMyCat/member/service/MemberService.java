@@ -68,15 +68,6 @@ public class MemberService {
         memberRepository.save(user);
     }
 
-    // 이메일 인증 성공 시, 계정 활성화
-    @Transactional
-    public void activateUser(String userEmail) {
-        User user = memberRepository.findByUserEmail(userEmail)
-                .orElseThrow(() -> new MemberNotFoundException("회원정보가 존재하지 않습니다. 회원가입을 진행해 주세요."));
-        user.emailVerifiedSuccess();
-        memberRepository.save(user);
-    }
-
     // 로그인 성공 여부 확인
     @Transactional
     public MemberDTO login(MemberLoginDTO memberLoginDTO) {

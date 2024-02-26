@@ -8,6 +8,7 @@ import com.hanghae.lookAtMyCat.activity.dto.PostResponseDTO;
 import com.hanghae.lookAtMyCat.activity.entity.Post;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CustomRepository {
 
@@ -15,7 +16,7 @@ public interface CustomRepository {
 
     List<PostLikeResponseDTO> getPostLikeList(Post post, Long userKey);
 
-    PostResponseDTO getPost(Long postKey, Long userKey);
+    Optional<PostResponseDTO> getPost(Long postKey, Long userKey);
 
     List<NewsFeedDTO> getNewsFeed(Long userKey);
 }

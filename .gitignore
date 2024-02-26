@@ -36,8 +36,5 @@ out/
 ### VS Code ###
 .vscode/
 
-### secret ###
-application-secret.yml
-
 ### database ###
-/db/mysql
+db/
