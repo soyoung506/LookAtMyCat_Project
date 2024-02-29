@@ -1,10 +1,7 @@
 package com.hanghae.lookAtMyCat.shopping.repository.customRepository;
 
 
-import com.hanghae.lookAtMyCat.shopping.dto.ProductResponseDTO;
-import com.hanghae.lookAtMyCat.shopping.dto.ProductListResponseDTO;
-import com.hanghae.lookAtMyCat.shopping.dto.PurchaseListResponseDTO;
-import com.hanghae.lookAtMyCat.shopping.dto.PurchaseResponseDTO;
+import com.hanghae.lookAtMyCat.shopping.dto.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,4 +24,7 @@ public interface CustomRepository {
     // db 재고 업데이트
     void subtractProdCount(Long prodKey, int purProdCount);
     void addProdCount(Long prodKey, int purProdCount);
+
+    // 장바구니 리스트 조회
+    List<CartListResponseDTO> getCartList(Long userKey);
 }

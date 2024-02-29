@@ -1,10 +1,7 @@
 package com.hanghae.lookAtMyCat.shopping.repository.customRepository;
 
 import com.hanghae.lookAtMyCat.shopping.dto.*;
-import com.hanghae.lookAtMyCat.shopping.entity.QOpenTime;
-import com.hanghae.lookAtMyCat.shopping.entity.QProduct;
-import com.hanghae.lookAtMyCat.shopping.entity.QPurchase;
-import com.hanghae.lookAtMyCat.shopping.entity.QPurchaseProd;
+import com.hanghae.lookAtMyCat.shopping.entity.*;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
@@ -135,5 +132,19 @@ public class CustomRepositoryImpl implements CustomRepository {
                 .set(product.prodCount, product.prodCount.add(purProdCount))
                 .where(product.prodKey.eq(prodKey))
                 .execute();
+    }
+
+    // 장바구니 조회
+    @Override
+    public List<CartListResponseDTO> getCartList(Long userKey) {
+        QCart cart = QCart.cart;
+        QProduct product = QProduct.product;
+        return query
+                .select(Projections.bean(CartListResponseDTO.class, cart.cartKey, product.prodKey,
+                        product.prodName, product.prodPrice, product.prodCount, cart.cartCount))
+                .from(cart)
+                .leftJoin(product).on(cart.product.prodKey.eq(product.prodKey))
+                .where(cart.userKey.eq(userKey))
+                .fetch();
     }
 }

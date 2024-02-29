@@ -41,4 +41,9 @@ public class ShoppingExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 
+    @ExceptionHandler(value = CartNotFoundException.class)
+    public ResponseEntity<String> cartNotFoundException(Exception e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }
+
 }

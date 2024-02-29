@@ -19,13 +19,6 @@ public class PurchaseController {
 
     private final PurchaseService purchaseService;
     private final InventoryService inventoryService;
-    
-    // 장바구니 조회 보류
-    
-    // 장바구니 추가 -> cartController 보류
-    
-    // 장바구니 삭제 보류
-
 
     // 주문창 진입 및 재고 수량 감소
     // 프론트단에서 오픈 상품 구매 시 구매수량 1개로 제한
