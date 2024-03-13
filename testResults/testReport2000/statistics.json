@@ -1,0 +1,34 @@
+{
+  "HTTP 요청_선착순 구매" : {
+    "transaction" : "HTTP 요청_선착순 구매",
+    "sampleCount" : 2000,
+    "errorCount" : 1950,
+    "errorPct" : 97.5,
+    "meanResTime" : 1966.6460000000004,
+    "medianResTime" : 2066.5,
+    "minResTime" : 115.0,
+    "maxResTime" : 3271.0,
+    "pct1ResTime" : 2829.8,
+    "pct2ResTime" : 2893.95,
+    "pct3ResTime" : 2955.9700000000003,
+    "throughput" : 404.4489383215369,
+    "receivedKBytesPerSec" : 183.27382457027298,
+    "sentKBytesPerSec" : 196.29992416582405
+  },
+  "총계" : {
+    "transaction" : "총계",
+    "sampleCount" : 2000,
+    "errorCount" : 1950,
+    "errorPct" : 97.5,
+    "meanResTime" : 1966.6460000000004,
+    "medianResTime" : 2066.5,
+    "minResTime" : 115.0,
+    "maxResTime" : 3271.0,
+    "pct1ResTime" : 2829.8,
+    "pct2ResTime" : 2893.95,
+    "pct3ResTime" : 2955.9700000000003,
+    "throughput" : 404.4489383215369,
+    "receivedKBytesPerSec" : 183.27382457027298,
+    "sentKBytesPerSec" : 196.29992416582405
+  }
+}
