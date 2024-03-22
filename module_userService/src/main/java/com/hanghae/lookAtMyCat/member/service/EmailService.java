@@ -58,7 +58,7 @@ public class EmailService {
     public String buildVerificationUrl(String token) {
         // 이메일 인증 링크 생성
         // 해당 URL은 클라이언트가 클릭할 때 호출됨
-        String baseUrl = "http://localhost:8081/members/signup/verify";
+        String baseUrl = "http://localhost:8080/user/members/signup/verify";
         return baseUrl + "?token=" + token;
     }
 

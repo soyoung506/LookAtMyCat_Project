@@ -56,9 +56,9 @@ public class MemberController {
         MemberDTO memberDTO = memberService.login(loginDTO);
         MemberLoginResponseDTO loginResponseDTO = jwtTokenService.createToken(memberDTO);
         // 쿠키에 HttpOnly로 access 토큰 저장
-        jwtTokenService.addTokenToCookie(response, loginResponseDTO.getAccessToken());
-        // 쿠키 or 로컬스토리지에 refresh 토큰 저장
-
+        jwtTokenService.addTokenToCookie(response, loginResponseDTO.getAccessToken(), false);
+        // 쿠키에 refresh 토큰 저장
+        jwtTokenService.addTokenToCookie(response, loginResponseDTO.getRefreshToken(), true);
         return ResponseEntity.ok(loginResponseDTO);
     }
 
@@ -68,9 +68,10 @@ public class MemberController {
         // 레디스에서 refresh 토큰 삭제
         jwtTokenService.deleteRefreshToken(refreshTokenDTO.getRefreshToken());
         // 쿠키에서 access 토큰 삭제
-        jwtTokenService.deleteTokenFromCookie(response);
-        // 쿠키 or 로컬스토리지에서 refresh 토큰 삭제
-        
+        jwtTokenService.deleteTokenFromCookie(response, false);
+        // 쿠키에서 refresh 토큰 삭제
+        jwtTokenService.deleteTokenFromCookie(response, true);
+
         return ResponseEntity.ok("로그아웃 되었습니다.");
     }
 
@@ -78,7 +79,7 @@ public class MemberController {
     @PostMapping("/refreshToken")
     public ResponseEntity<MemberLoginResponseDTO> requestRefresh(@RequestBody RefreshTokenDTO refreshTokenDTO, HttpServletResponse response) {
         MemberLoginResponseDTO loginResponseDTO = jwtTokenService.newAccessToken(refreshTokenDTO.getRefreshToken());
-        jwtTokenService.addTokenToCookie(response, loginResponseDTO.getAccessToken());
+        jwtTokenService.addTokenToCookie(response, loginResponseDTO.getAccessToken(), false);
         return ResponseEntity.ok(loginResponseDTO);
     }
 

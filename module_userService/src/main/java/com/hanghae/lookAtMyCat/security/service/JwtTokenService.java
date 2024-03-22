@@ -77,18 +77,28 @@ public class JwtTokenService {
     }
 
     // 쿠키에 access 토큰 저장
-    public void addTokenToCookie(HttpServletResponse response, String accessToken) {
-        String encodedToken = URLEncoder.encode("Bearer%" + accessToken, StandardCharsets.UTF_8);
-        Cookie cookie = new Cookie("Authorization", encodedToken);
+    public void addTokenToCookie(HttpServletResponse response, String token, boolean refreshToken) {
+//        String encodedToken = URLEncoder.encode("Bearer%" + accessToken, StandardCharsets.UTF_8);
+        String cookieName = "Authorization_access";
+        int maxAge = 60*30;
+        if (refreshToken) {
+            cookieName = "Authorization_refresh";
+            maxAge = 60*60*24*7;
+        }
+        Cookie cookie = new Cookie(cookieName, token);
         cookie.setPath("/");
-        cookie.setMaxAge(1800);
+        cookie.setMaxAge(maxAge);
         cookie.setHttpOnly(true);
         response.addCookie(cookie);
     }
 
     // 쿠키에서 access 토큰 삭제
-    public void deleteTokenFromCookie(HttpServletResponse response) {
-        Cookie cookie = new Cookie("Authorization", null);
+    public void deleteTokenFromCookie(HttpServletResponse response, boolean refreshToken) {
+        String cookieName = "Authorization_access";
+        if (refreshToken) {
+            cookieName = "Authorization_refresh";
+        }
+        Cookie cookie = new Cookie(cookieName, null);
         cookie.setPath("/");
         cookie.setMaxAge(0);
         cookie.setHttpOnly(true);
