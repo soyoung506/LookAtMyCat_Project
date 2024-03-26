@@ -7,7 +7,7 @@
 <br>
 
 ## API 명세서 및 주요 기능
-API 명세서는 [이곳](https://documenter.getpostman.com/view/32558643/2sA35A8Qpk, "포스트맨 Documenter")에서 확인하세요. 
+API 명세서는 [이곳](https://documenter.getpostman.com/view/32558643/2sA35A8Qpk "포스트맨 Documenter")에서 확인하세요. 
 + User Service
   + 회원가입, 로그인, JWT 인증/인가, AccessToken 재발급, 로그아웃, 회원정보 조회/수정
 + Activity Service
