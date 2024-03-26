@@ -4,6 +4,7 @@
 댓글, 좋아요, 팔로우 기능을 활용하여 반려묘 커뮤니티를 형성할 수 있으며, 
 사용자들은 특정 시간에 오픈되는 반려묘 관련 용품을 선착순으로 구매할 수 있습니다.
 
+<br>
 
 ## API 명세서 및 주요 기능
 API 명세서는 [이곳](https://documenter.getpostman.com/view/32558643/2sA35A8Qpk, "포스트맨 Documenter")에서 확인하세요. 
@@ -14,6 +15,7 @@ API 명세서는 [이곳](https://documenter.getpostman.com/view/32558643/2sA35A
 + Shopping Service
   + 상품 조회, 장바구니 CRUD, 주문창 진입, 결제 및 결제 실패, 결제 내역 조회
 
+<br>
 
 ## 개발 환경
 + Java 17
@@ -23,6 +25,7 @@ API 명세서는 [이곳](https://documenter.getpostman.com/view/32558643/2sA35A
 + 컨테이너화: Docker
 + 통합 개발 환경: IntelliJ 2023.3.2
 
+<br>
 
 ## 아키텍처
 <details>
@@ -38,6 +41,7 @@ API 명세서는 [이곳](https://documenter.getpostman.com/view/32558643/2sA35A
 </div>
 </details>
 
+<br>
 
 ## 프로젝트 설치
 Docker 환경에서의 설치방법입니다.
