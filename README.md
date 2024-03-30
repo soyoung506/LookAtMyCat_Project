@@ -17,13 +17,8 @@ API 명세서는 [이곳](https://documenter.getpostman.com/view/32558643/2sA35A
 
 <br>
 
-## 개발 환경
-+ Java 17
-+ 프레임워크: SpringBoot (3.2.2)
-+ 데이터베이스: MySQL
-+ 캐싱 및 세션 관리: Redis
-+ 컨테이너화: Docker
-+ 통합 개발 환경: IntelliJ 2023.3.2
+## ERD
+<img src="images/LookAtMyCat.png" alt="개체 관계도">
 
 <br>
 
@@ -43,6 +38,16 @@ API 명세서는 [이곳](https://documenter.getpostman.com/view/32558643/2sA35A
 
 <br>
 
+## 개발 환경
++ Java 17
++ 프레임워크: SpringBoot (3.2.2)
++ 데이터베이스: MySQL
++ 캐싱 및 세션 관리: Redis
++ 컨테이너화: Docker
++ 통합 개발 환경: IntelliJ 2023.3.2
+
+<br>
+
 ## 프로젝트 설치
 Docker 환경에서의 설치방법입니다.
 
@@ -51,5 +56,3 @@ git clone https://github.com/soyoung506/LookAtMyCat_Project.git
 cd LookAtMyCat_Project
 docker-compose up -d
 ```
-   
-
