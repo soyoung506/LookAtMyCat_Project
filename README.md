@@ -46,13 +46,3 @@ API 명세서는 [이곳](https://documenter.getpostman.com/view/32558643/2sA35A
 + 컨테이너화: Docker
 + 통합 개발 환경: IntelliJ 2023.3.2
 
-<br>
-
-## 프로젝트 설치
-Docker 환경에서의 설치방법입니다.
-
-```sh
-git clone https://github.com/soyoung506/LookAtMyCat_Project.git
-cd LookAtMyCat_Project
-docker-compose up -d
-```
